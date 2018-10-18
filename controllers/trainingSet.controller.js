@@ -5,6 +5,7 @@ export function test(req, res) {
   res.send("All things work well from my end!!!");
 }
 
+// function to upload a single dataset and its label
 export const trainingDataCreate = (req, res, next) => {
   const { label, url } = req.body;
   const trainingSet = new TrainingSet({
@@ -24,6 +25,7 @@ export const trainingDataCreate = (req, res, next) => {
     });
 };
 
+// function to get a list of all the dataset
 export const trainingDataList = (req, res, next) => {
   const { page = 0, limit = 10 } = req.query;
   TrainingSet.find()
