@@ -1,16 +1,13 @@
+require('dotenv').config();
 import express from "express";
 import { json, urlencoded } from "body-parser";
 
 //setup mongoose connection
-import { connect, connection, Mongoose } from "mongoose";
+import Mongoose from "mongoose";
 import trainingSet from "./routes/trainingSet.route";
 
-
-const dbUrl =
-  "mongodb://trainingSet:samuel2000%40@ds237770.mlab.com:37770/training_set_upload";
-
-const mongoDB = process.env.MONGODB_URI || dbUrl;
-connect(
+const mongoDB = process.env.MONGO_DB_URI;
+Mongoose.connect(
   mongoDB,
   {
     uri_decode_auth: true
@@ -19,7 +16,7 @@ connect(
 
 Mongoose.Promise = global.Promise;
 
-const db = connection;
+const db = Mongoose.connection;
 
 db.on("error", console.error.bind(console, "MongoDB Connection Error:"));
 
