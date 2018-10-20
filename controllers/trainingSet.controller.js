@@ -1,4 +1,5 @@
-import TrainingSet, { find } from "../models/trainingSet.model";
+import TrainingSet from "../models/trainingSet.model";
+import uploadFileToIPFS from "../services/ipfs";
 
 // test controller function
 export function test(req, res) {
@@ -7,22 +8,29 @@ export function test(req, res) {
 
 // function to upload a single dataset and its label
 export const trainingDataCreate = (req, res, next) => {
-  const { label, url } = req.body;
-  const trainingSet = new TrainingSet({
-    label,
-    url
-  });
-
-  trainingSet
-    .save()
-    .then(data => {
-      res.status(201).json({
-        message: "Training Data Created Successfully"
-      });
-    })
-    .catch(error => {
-      return next(error);
+  uploadFileToIPFS(req.file.buffer, (error, data) => {
+    if (error) {
+      next(error);
+    }
+    const { label } = req.body;
+    const url = `https://gateway.ipfs.io/ipfs/${data[0].hash}`
+    const trainingSet = new TrainingSet({
+      label,
+      url,
     });
+
+    trainingSet
+      .save()
+      .then(data => {
+        res.status(201).json({
+          message: "Training Data Created Successfully",
+          data: trainingSet
+        });
+      })
+      .catch(error => {
+        return next(error);
+      });
+  });
 };
 
 // function to get a list of all the dataset
@@ -35,7 +43,7 @@ export const trainingDataList = (req, res, next) => {
       return res.status(200).json({
         paging: {
           "page-count": page,
-          "page-limit": limit,
+          "page-limit": limit
         },
         data
       });
