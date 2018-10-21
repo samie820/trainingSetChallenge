@@ -3,6 +3,8 @@ import ipfsAPI from "ipfs-api";
 import web3 from "./web3";
 import storehash from "./storehash";
 
+// WIP: Haven't been able to set it up the accounts keep returning undefined
+
 export const uploadHashToBlockchain = ipfsHash => {
   //bring in user's metamask account address
   const accounts = web3.eth.accounts;
@@ -28,7 +30,6 @@ const uploadFileToIPFS = (file, callback) => {
       callback(err, null);
     }
     callback(null, file);
-    uploadHashToBlockchain(file[0].hash);
   });
 };
 

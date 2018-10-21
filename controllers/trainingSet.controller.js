@@ -13,10 +13,11 @@ export const trainingDataCreate = (req, res, next) => {
       next(error);
     }
     const { label } = req.body;
-    const url = `https://gateway.ipfs.io/ipfs/${data[0].hash}`
+    const url = `https://gateway.ipfs.io/ipfs/${data[0].hash}`;
     const trainingSet = new TrainingSet({
       label,
       url,
+      hash: data[0].hash
     });
 
     trainingSet
@@ -40,12 +41,16 @@ export const trainingDataList = (req, res, next) => {
     .limit(limit)
     .skip(page * limit)
     .then(data => {
-      return res.status(200).json({
-        paging: {
-          "page-count": page,
-          "page-limit": limit
-        },
-        data
+      TrainingSet.count({}).then(count => {
+        console.log(count)
+        return res.status(200).json({
+          paging: {
+            "pageCount": page,
+            "pageLimit": limit,
+            "totalCount": count
+          },
+          data
+        });
       });
     })
     .catch(error => {
