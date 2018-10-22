@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node --presets env,stage-2 app.js",
-    "build": "babel . -s -D -d dist --ignore node_modules,package.json,package-lock.json,README.md,.gitignore.babelrc,.env"
+    "build": "babel . -s -D -d dist --ignore node_modules,package.json,package-lock.json,README.md,.gitignore.babelrc,.env",
+    "up": "node dist/app"
   },
   "author": "",
   "license": "ISC",
